@@ -46,7 +46,7 @@ public class CreateMemoActivity extends AppCompatActivity {
             SQLiteDatabase db = helper.getWritableDatabase();
             try {
                 // rawQueryというSELECT専用メソッドを使用してデータを取得する
-                Cursor c = db.rawQuery("select body from MEMO_TABLE where uuid = '" + id + "'", null);
+                Cursor c = db.rawQuery("SELECT body FROM MEMO_TABLE WHERE uuid = '" + id + "'", null);
                 // Cursor の先頭行があるかどうかを確認
                 boolean next = c.moveToFirst();
                 // 取得したすべての行を取得
@@ -86,10 +86,10 @@ public class CreateMemoActivity extends AppCompatActivity {
                         // 新しく uuid を発行する
                         id = UUID.randomUUID().toString();
                         // INSERT
-                        db.execSQL("insert into MEMO_TABLE(uuid, body) VALUES('" + id + "', '" + bodyStr + "')");
+                        db.execSQL("INSERT INTO MEMO_TABLE(uuid, body) VALUES('" + id + "', '" + bodyStr + "')");
                     } else {
                         // UPDATE
-                        db.execSQL("update MEMO_TABLE set body = '" + bodyStr + "' where uuid = '" + id + "'");
+                        db.execSQL("UPDATE MEMO_TABLE SET body = '" + bodyStr + "' WHERE uuid = '" + id + "'");
                     }
                 } finally {
                     // finally は、try の中で例外が発生したときでも必ず実行される
