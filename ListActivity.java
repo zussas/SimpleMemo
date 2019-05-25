@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -101,8 +102,8 @@ public class ListActivity extends AppCompatActivity {
 
 
                     //　選択されたビューを取得 TwoLineListItemを取得した後、text2の値を取得する
-                    TextView tvIdText = findViewById(R.id.idText);
-                    String idTextView = tvIdText.getText().toString();
+                    TextView tvIdText = view.findViewById(R.id.idText);
+                    String isStr = tvIdText.getText().toString();
                     //　値を引き渡す（識別名, 値）の順番で指定する
                     intent.putExtra("id", idTextView);
                     //　Activity起動
