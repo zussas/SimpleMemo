@@ -37,7 +37,7 @@ public class ListActivity extends AppCompatActivity {
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
             // rawQuery という SELECT 専用メソッドを使用してデータを取得する
-            Cursor c = db.rawQuery("select uuid, body from MEMO_TABLE order by id", null);
+            Cursor c = db.rawQuery("SELECT uuid, body FROM MEMO_TABLE ORDER BY  id", null);
             // Cursor の先頭行があるかどうかを確認
             boolean next = c.moveToFirst();
 
@@ -79,9 +79,9 @@ public class ListActivity extends AppCompatActivity {
              */
             SimpleAdapter simpleAdapter = new SimpleAdapter(this,
                     memoList, // 使用するデータ (仮のデータの時 tmpList)
-                    android.R.layout.simple_list_item_2, // 使用するレイアウト
+                    R.layout.row, // 使用するレイアウト
                     new String[] {"body", "id"}, //どの項目を
-                    new int[]{android.R.id.text1, android.R.id.text2} // どのidの項目に入れるか
+                    new int[]{R.id.mainText, R.id.idText} // どのidの項目に入れるか
                     );
 
             ListView listView = findViewById(R.id.memoList);
@@ -99,12 +99,12 @@ public class ListActivity extends AppCompatActivity {
                     //　インテント作成　第二引数には遷移先クラスを指定
                     Intent intent = new Intent(ListActivity.this, CreateMemoActivity.class);
 
+
                     //　選択されたビューを取得 TwoLineListItemを取得した後、text2の値を取得する
-                    TwoLineListItem two = (TwoLineListItem) view;
-                    TextView idTextView = two.getText2();
-                    String isStr = (String) idTextView.getText();
+                    TextView tvIdText = findViewById(R.id.idText);
+                    String idTextView = tvIdText.getText().toString();
                     //　値を引き渡す（識別名, 値）の順番で指定する
-                    intent.putExtra("id", isStr);
+                    intent.putExtra("id", idTextView);
                     //　Activity起動
                     startActivity(intent);
                 }
