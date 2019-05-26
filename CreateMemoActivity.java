@@ -94,7 +94,7 @@ public class CreateMemoActivity extends AppCompatActivity {
                         db.execSQL("INSERT INTO MEMO_TABLE(uuid, title, body) VALUES('" + id + "', '" + titleStr + "', '" + bodyStr +  "')");
                     } else {
                         // UPDATE
-                        db.execSQL("UPDATE MEMO_TABLE SET body = '" + bodyStr + "', title = '" + titleStr + "' WHERE uuid = ''" + id + "'");
+                        db.execSQL("UPDATE MEMO_TABLE SET body = '" + bodyStr + "', title = '" + titleStr + "' WHERE uuid = '" + id + "'");
                     }
                 } finally {
                     // finally は、try の中で例外が発生したときでも必ず実行される
