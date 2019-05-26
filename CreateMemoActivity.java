@@ -108,6 +108,32 @@ public class CreateMemoActivity extends AppCompatActivity {
         });
 
         /**
+         * 削除ボタン処理
+         */
+        // delete ボタンを取得
+        Button deleteButton = findViewById(R.id.delete);
+        // click イベント追加
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // title 情報を取得
+                EditText tvTitleText = findViewById(R.id.title);
+                String titleStr = tvTitleText.getText().toString();
+                // データベースから削除する
+                SQLiteDatabase db = helper.getWritableDatabase();
+                try {
+                    // DELETE
+                    db.execSQL("DELETE FROM MEMO_TABLE WHERE title = '" + titleStr + "'");
+                } finally {
+                    db.close();
+                }
+                Intent intent = new Intent(CreateMemoActivity.this, ListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        /**
          * 戻るボタン処理
          **/
         // id が back のボタンを取得
