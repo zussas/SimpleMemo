@@ -35,7 +35,7 @@ public class CreateMemoActivity extends AppCompatActivity {
         // ListActivityからインテントを取得
         Intent intent = this.getIntent();
         // 値を取得
-        id = intent.getStringExtra("id");
+        id = intent.getStringExtra("uuid");
         // 画面に表示
         if (id.equals("")) {
             // 新規作成の場合
@@ -46,13 +46,16 @@ public class CreateMemoActivity extends AppCompatActivity {
             SQLiteDatabase db = helper.getWritableDatabase();
             try {
                 // rawQueryというSELECT専用メソッドを使用してデータを取得する
-                Cursor c = db.rawQuery("SELECT body FROM MEMO_TABLE WHERE uuid = '" + id + "'", null);
+                Cursor c = db.rawQuery("SELECT title,  body FROM MEMO_TABLE WHERE uuid = '" + id + "'", null);
                 // Cursor の先頭行があるかどうかを確認
                 boolean next = c.moveToFirst();
                 // 取得したすべての行を取得
                 while (next) {
                     // 取得したカラムの順番（0から始まる）と型を指定してデータを取得する
-                    String dispBody = c.getString(0);
+                    String dispTitle = c.getString(0);
+                    EditText title = findViewById(R.id.title);
+                    title.setText(dispTitle, TextView.BufferType.NORMAL);
+                    String dispBody = c.getString(1);
                     EditText body = findViewById(R.id.body);
                     body.setText(dispBody, TextView.BufferType.NORMAL);
                     next = c.moveToNext();
@@ -75,6 +78,8 @@ public class CreateMemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 入力内容を取得する
+                EditText title = findViewById(R.id.title);
+                String titleStr = title.getText().toString();
                 EditText body = findViewById(R.id.body);
                 String bodyStr = body.getText().toString();
 
@@ -86,10 +91,10 @@ public class CreateMemoActivity extends AppCompatActivity {
                         // 新しく uuid を発行する
                         id = UUID.randomUUID().toString();
                         // INSERT
-                        db.execSQL("INSERT INTO MEMO_TABLE(uuid, body) VALUES('" + id + "', '" + bodyStr + "')");
+                        db.execSQL("INSERT INTO MEMO_TABLE(uuid, title, body) VALUES('" + id + "', '" + titleStr + "', '" + bodyStr +  "')");
                     } else {
                         // UPDATE
-                        db.execSQL("UPDATE MEMO_TABLE SET body = '" + bodyStr + "' WHERE uuid = '" + id + "'");
+                        db.execSQL("UPDATE MEMO_TABLE SET body = '" + bodyStr + "', title = '" + titleStr + "' WHERE uuid = ''" + id + "'");
                     }
                 } finally {
                     // finally は、try の中で例外が発生したときでも必ず実行される

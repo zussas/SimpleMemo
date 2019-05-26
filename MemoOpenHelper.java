@@ -37,13 +37,15 @@ public class MemoOpenHelper extends SQLiteOpenHelper {
          * テーブルを作成する
          * execSQLメソッドにCREATET TABLE命令を文字列として渡すことで実行される
          * 引数で指定されているものの意味は以下の通り
-         * 引数1 ・・・ id：列名 , INTEGER：数値型 , PRIMATY KEY：テーブル内の行で重複無し , AUTOINCREMENT：1から順番に振っていく
+         * 引数1 ・・・ id：列名 , INTEGER：数値型 , PRIMARY KEY：テーブル内の行で重複無し , AUTOINCREMENT：1から順番に振っていく
          * 引数2 ・・・ uuid：列名 , TEXT：文字列型
-         * 引数3 ・・・ body：列名 , TEXT：文字列型
+         * 引数3 ・・・ title：列名 , TEXT：文字列型
+         * 引数4 ・・・ body：列名 , TEXT：文字列型
          */
         db.execSQL("CREATE TABLE MEMO_TABLE (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "uuid TEXT, " +
+        "title TEXT, " +
         "body TEXT)");
     }
 }

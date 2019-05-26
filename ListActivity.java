@@ -38,7 +38,7 @@ public class ListActivity extends AppCompatActivity {
         SQLiteDatabase db = helper.getWritableDatabase();
         try {
             // rawQuery という SELECT 専用メソッドを使用してデータを取得する
-            Cursor c = db.rawQuery("SELECT uuid, body FROM MEMO_TABLE ORDER BY  id", null);
+            Cursor c = db.rawQuery("SELECT uuid, title, body FROM MEMO_TABLE ORDER BY  id", null);
             // Cursor の先頭行があるかどうかを確認
             boolean next = c.moveToFirst();
 
@@ -47,11 +47,13 @@ public class ListActivity extends AppCompatActivity {
                 HashMap<String, String> data = new HashMap<>();
                 // 取得したカラムの順番（0から始まる）を型を指定したデータを取得
                 String uuid = c.getString(0);
-                String body = c.getString(1);
+                String title = c.getString(1);
+                String body = c.getString(2);
                 if (body.length() > 10) {
                     // リストに表示するのは 10 字まで
                     body = body.substring(0, 11) + "...";
                 }
+                data.put("title", title);
                 data.put("body", body);
                 data.put("id", uuid);
                 memoList.add(data);
@@ -81,8 +83,8 @@ public class ListActivity extends AppCompatActivity {
             SimpleAdapter simpleAdapter = new SimpleAdapter(this,
                     memoList, // 使用するデータ (仮のデータの時 tmpList)
                     R.layout.row, // 使用するレイアウト
-                    new String[] {"body", "id"}, //どの項目を
-                    new int[]{R.id.mainText, R.id.idText} // どのidの項目に入れるか
+                    new String[] {"title", "body"}, //どの項目を
+                    new int[]{R.id.titleText, R.id.bodyText} // どのidの項目に入れるか
                     );
 
             ListView listView = findViewById(R.id.memoList);
@@ -100,12 +102,32 @@ public class ListActivity extends AppCompatActivity {
                     //　インテント作成　第二引数には遷移先クラスを指定
                     Intent intent = new Intent(ListActivity.this, CreateMemoActivity.class);
 
-
-                    //　選択されたビューを取得 TwoLineListItemを取得した後、text2の値を取得する
-                    TextView tvIdText = view.findViewById(R.id.idText);
-                    String isStr = tvIdText.getText().toString();
+                    //　選択されたビューを取得
+                    TextView tvTitleText = view.findViewById(R.id.titleText);
+                    String titleStr = tvTitleText.getText().toString();
+                    TextView tvBodyText = view.findViewById(R.id.bodyText);
+                    String bodyStr = tvBodyText.getText().toString();
+                    //　uuid 取得
+                    SQLiteDatabase db = helper.getWritableDatabase();
+                    try {
+                        // rawQueryというSELECT専用メソッドを使用してデータを取得する
+                        Cursor c = db.rawQuery("SELECT uuid FROM MEMO_TABLE WHERE title = '" + titleStr + "'", null);
+                        // Cursor の先頭行があるかどうかを確認
+                        boolean next = c.moveToFirst();
+                        // 取得したすべての行を取得
+                        while (next) {
+                            String uuidStr = c.getString(0);
+                            intent.putExtra("uuid", uuidStr);
+                            next = c.moveToNext();
+                        }
+                    } finally {
+                        // finally は、try の中で例外が発生したときでも必ず実行
+                        // db を開いたら確実に close
+                        db.close();
+                    }
                     //　値を引き渡す（識別名, 値）の順番で指定する
-                    intent.putExtra("id", idTextView);
+
+
                     //　Activity起動
                     startActivity(intent);
                 }
@@ -123,7 +145,9 @@ public class ListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     // CreateMemoActivityへ遷移
                     Intent intent = new Intent(ListActivity.this, CreateMemoActivity.class);
-                    intent.putExtra("id", "");
+                    intent.putExtra("uuid", "");
+                    intent.putExtra("title", "");
+                    intent.putExtra("body", "");
                     startActivity(intent);
                 }
             });
