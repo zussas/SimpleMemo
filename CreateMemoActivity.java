@@ -90,8 +90,15 @@ public class CreateMemoActivity extends AppCompatActivity {
                         // 新規作成の場合
                         // 新しく uuid を発行する
                         id = UUID.randomUUID().toString();
-                        // INSERT
-                        db.execSQL("INSERT INTO MEMO_TABLE(uuid, title, body) VALUES('" + id + "', '" + titleStr + "', '" + bodyStr +  "')");
+                        // 未入力保存の時の処理
+                        if (titleStr.equals("")) { // titleStr の未入力処理
+                            finish();
+                        } else if (bodyStr.equals("")){ // bodyStr の未入力処理
+                            finish();
+                        } else {
+                            // INSERT
+                            db.execSQL("INSERT INTO MEMO_TABLE(uuid, title, body) VALUES('" + id + "', '" + titleStr + "', '" + bodyStr +  "')");
+                        }
                     } else {
                         // UPDATE
                         db.execSQL("UPDATE MEMO_TABLE SET body = '" + bodyStr + "', title = '" + titleStr + "' WHERE uuid = '" + id + "'");
