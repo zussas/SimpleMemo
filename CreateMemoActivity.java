@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -92,8 +93,10 @@ public class CreateMemoActivity extends AppCompatActivity {
                         id = UUID.randomUUID().toString();
                         // 未入力保存の時の処理
                         if (titleStr.equals("")) { // titleStr の未入力処理
+                            Toast.makeText(CreateMemoActivity.this, "タイトルが入力されていません。", Toast.LENGTH_SHORT).show();
                             finish();
                         } else if (bodyStr.equals("")){ // bodyStr の未入力処理
+                            Toast.makeText(CreateMemoActivity.this, "内容が入力されていません。", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
                             // INSERT
